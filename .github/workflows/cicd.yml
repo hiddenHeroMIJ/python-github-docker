@@ -1,1 +1,32 @@
+name: Continous Integration and Continous Deployment
 
+on:
+    push:
+        branches:
+            - main
+
+jobs:
+    build:
+        runs-on: ubuntu-latest
+        steps:
+           - name: Checkout Source
+             uses: actions/checkout@v3
+           - name: Login to Docker Hub
+             run: docker login -u ${{secrets.DOCKER_USERNAME}} -p ${{secrets.DOCKER_PASSWORD}}
+           - name: Build Docker Image
+             run: docker build -t python-app -f build_docker_image
+           - name: Tag the Docker Image
+             run: docker push python-app hiddenheromij/python-app
+           - name: Publish the Tagged Docker Image to Docker Hub
+             run: docker push hiddenheromij/python-app
+        
+    deploy:
+        needs: build
+        runs-on: aws-ec2
+        steps:
+           - name: Pull image from docker hub
+             run: docker pull hiddenheromij/python-app 
+           - name: Delete Old Container
+             run: docker rmi -f hiddenheromij/python-app
+           - name: Run docker container
+             run: docker run -d -p 5000:5000 --name pythonContainer hiddenheromij/python-app 
