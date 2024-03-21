@@ -16,7 +16,7 @@ jobs:
            - name: Build Docker Image
              run: docker build -t python-app -f build_docker_image .
            - name: Tag the Docker Image
-             run: docker push python-app hiddenheromij/python-app
+             run: docker tag python-app hiddenheromij/python-app
            - name: Publish the Tagged Docker Image to Docker Hub
              run: docker push hiddenheromij/python-app
         
