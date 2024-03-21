@@ -27,8 +27,8 @@ jobs:
         runs-on: aws-ec2
         steps:
            - name: Pull image from docker hub
-             run: docker pull hiddenheromij/python-app 
+             run: docker pull python-app 
            - name: Delete Old Container
-             run: docker rmi -f hiddenheromij/python-app
+             run: docker rmi -f python-app
            - name: Run docker container
-             run: docker run -d -p 5000:5000 --name pythonContainer hiddenheromij/python-app
+             run: docker run -d -p 5000:5000 python-app
